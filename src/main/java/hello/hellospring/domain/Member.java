@@ -1,8 +1,16 @@
 package hello.hellospring.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class Member {
 
+
+    /* PK */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    /* @Column(name = "username") db안에서 username으로 되어 있을 경우*/
     private String name;
 
     public Long getId() {
