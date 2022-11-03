@@ -24,7 +24,7 @@ class MemoryMemberRepositoryTest {
 
         repository.save(member);
 
-        Member result = repository.findByID(member.getId()).get();
+        Member result = repository.findById(member.getId()).get();
         /*System.out.println("result = " + (result == member));*/
         /*Assertions.assertEquals(member, null);*/ /*org.assertj.core.api.Assertions*/
         /*Assertions.assertThat(member).isEqualTo(result);*/ /*org.assertj.core.api.Assertions*/
