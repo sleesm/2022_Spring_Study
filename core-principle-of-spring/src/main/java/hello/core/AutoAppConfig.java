@@ -12,8 +12,10 @@ import org.springframework.context.annotation.FilterType;
         excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
 )
 public class AutoAppConfig {
+/*  //Spring boot test - conflicting bean definition
     @Bean(name = "memoryMemberRepository")
     public MemberRepository memberRepository(){
         return new MemoryMemberRepository();
     }
+    */
 }
