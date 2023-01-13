@@ -6,25 +6,28 @@ import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
-    //필드 주입
-    @Autowired private MemberRepository memberRepository;
+    //필드 주입 -> @Autowired private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+    private final DiscountPolicy discountPolicy;
 
-    @Autowired private DiscountPolicy discountPolicy;
-
+/*
     //일반 메서드 주입
     @Autowired
     public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy){
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
+*/
 
-    //setter 주입
+/*    //setter 주입
     @Autowired(required = false)
     public void setMemberRepository(MemberRepository memberRepository) {
         System.out.println("memberRepository = " + memberRepository);
@@ -36,13 +39,16 @@ public class OrderServiceImpl implements OrderService{
         System.out.println("discountPolicy = " + discountPolicy);
         this.discountPolicy = discountPolicy;
     }
+*/
 
-    @Autowired //생성자 주입. 생성자 1개라서 생략 가능
+/*
+    //생성자 주입. 생성자 1개라서 @Autowired 생략 가능
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         System.out.println("1. OrderServiceImpl.OrderServiceImpl");
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
+*/
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
