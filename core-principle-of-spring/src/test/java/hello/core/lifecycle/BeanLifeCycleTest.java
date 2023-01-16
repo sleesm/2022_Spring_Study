@@ -19,7 +19,7 @@ public class BeanLifeCycleTest {
     @Configuration
     static class lifeCycleConfig{
 
-        @Bean
+        @Bean(initMethod = "init") // , destroyMethod = "close" 기본값이 추론이기 때문에 안 적어도 실행됨.
         public NetworkClient networkClient(){
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");
