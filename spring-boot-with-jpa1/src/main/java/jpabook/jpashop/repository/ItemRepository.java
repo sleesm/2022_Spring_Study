@@ -16,7 +16,7 @@ public class ItemRepository {
     public void save(Item item){
         if(item.getId() == null){ //새로 생성한 객체 (신규 등록)
             em.persist(item);
-        }else { //이미 있는 객체 (update 느낌)
+        }else { //이미 있는 객체 (update 느낌) - 준영속 엔팉티를 영속 상태로 변경.
             em.merge(item);
         }
     }
