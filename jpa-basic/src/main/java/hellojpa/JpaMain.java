@@ -16,7 +16,7 @@ public class JpaMain {
         tx.begin();
 
         try {
-/*            //바영속
+/*            //비영속
             Member member = new Member();
             member.setId(1L);
             member.setName("HelloJPA");
@@ -31,8 +31,8 @@ public class JpaMain {
             //동일성 보장
             System.out.println(findMember1 == findMember2);*/
 
-            //쓰기 지연
-/*            Member member1 = new Member(150L, "A");
+/*            //쓰기 지연
+            Member member1 = new Member(150L, "A");
             Member member2 = new Member(160L, "B");
 
             em.persist(member1);
@@ -44,10 +44,29 @@ public class JpaMain {
             Member member = em.find(Member.class, 150L);
             member.setName("ZZZZ");*/
 
-            //플러쉬
+/*            //플러쉬
             Member member = new Member(200L, "member200");
             em.persist(member);
             em.flush();
+            System.out.println("===================================");*/
+
+            Member member1 = new Member();
+            member1.setUsername("C");
+            Member member2 = new Member();
+            member2.setUsername("C");
+            Member member3 = new Member();
+            member3.setUsername("C");
+
+
+            System.out.println("===================================");
+            em.persist(member1); //1, 51로 맞춤
+            em.persist(member2); //Memory 에서 호출 2
+            em.persist(member3); //Memory 에서 호출 3
+
+            System.out.println("===================================");
+            System.out.println("member1.getId() = " + member1.getId());
+            System.out.println("member2.getId() = " + member2.getId());
+            System.out.println("member2.getId() = " + member3.getId());
             System.out.println("===================================");
 
             tx.commit();
