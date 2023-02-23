@@ -50,6 +50,7 @@ public class JpaMain {
             em.flush();
             System.out.println("===================================");*/
 
+/*            //시퀀스
             Member member1 = new Member();
             member1.setUsername("C");
             Member member2 = new Member();
@@ -67,7 +68,31 @@ public class JpaMain {
             System.out.println("member1.getId() = " + member1.getId());
             System.out.println("member2.getId() = " + member2.getId());
             System.out.println("member2.getId() = " + member3.getId());
-            System.out.println("===================================");
+            System.out.println("===================================");*/
+
+
+            //양방향 연관관계
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
+
+            Member member = new Member();
+            member.setUsername("member1");
+
+/*            //연관관계 편의 메서드 추가하여 생략
+            team.getMembers().add(member);
+            member.setTeam(team);*/
+            member.changeTeam(team);
+            em.persist(member);
+
+//            em.flush();
+//            em.clear();
+
+            Member findMember = em.find(Member.class, member.getId());
+            List<Member> members = findMember.getTeam().getMembers();
+            for (Member m : members) {
+                System.out.println("m.getUsername() = " + m.getUsername());
+            }
 
             tx.commit();
         }catch (Exception e){
