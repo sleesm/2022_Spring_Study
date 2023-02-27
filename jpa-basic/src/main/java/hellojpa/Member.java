@@ -26,13 +26,13 @@ public class Member extends BaseEntity{
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
-    @OneToOne
+/*    @OneToOne
     @JoinColumn(name = "LOCKER_ID")
     private Locker locker;
 
     @ManyToMany
     @JoinTable(name = "member")
-    private List<MemberProduct> memberProducts = new ArrayList<>();
+    private List<MemberProduct> memberProducts = new ArrayList<>();*/
 
     public Long getId() {
         return id;
