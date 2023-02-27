@@ -1,10 +1,7 @@
 package hellojpa;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -120,9 +117,29 @@ public class JpaMain {
             em.flush();
             em.clear();*/
 
+            //Proxy
+            Member member = new Member();
+            member.setUsername("hello");
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            Member findMemberReference = em.getReference(Member.class, member.getId());
+            System.out.println("findMemberReference = " + findMemberReference.getClass());
+            System.out.println("findMemberReference.getId() = " + findMemberReference.getId());
+
+//            em.detach(findMemberReference);
+
+            System.out.println("findMemberReference.getUsername() = " + findMemberReference.getUsername());
+            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(findMemberReference));
+
+
             tx.commit();
         }catch (Exception e){
             tx.rollback();
+            e.printStackTrace();
         }finally {
             em.close();
         }
