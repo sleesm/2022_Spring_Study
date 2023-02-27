@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -71,7 +72,7 @@ public class JpaMain {
             System.out.println("===================================");*/
 
 
-            //양방향 연관관계
+/*            //양방향 연관관계
             Team team = new Team();
             team.setName("TeamA");
             em.persist(team);
@@ -79,9 +80,9 @@ public class JpaMain {
             Member member = new Member();
             member.setUsername("member1");
 
-/*            //연관관계 편의 메서드 추가하여 생략
+*//*            //연관관계 편의 메서드 추가하여 생략
             team.getMembers().add(member);
-            member.setTeam(team);*/
+            member.setTeam(team);*//*
             member.changeTeam(team);
             em.persist(member);
 
@@ -92,7 +93,32 @@ public class JpaMain {
             List<Member> members = findMember.getTeam().getMembers();
             for (Member m : members) {
                 System.out.println("m.getUsername() = " + m.getUsername());
-            }
+            }*/
+
+/*            //상속관계매핑
+            Movie movie = new Movie();
+            movie.setDirector("aaaa");
+            movie.setActor("bbbb");
+            movie.setName("바람과함께사라지다");
+            movie.setPrice(10000);
+
+            em.persist(movie);
+
+            em.flush();
+            em.clear();
+
+            Movie findMovie = em.find(Movie.class, movie.getId());
+            System.out.println("findMovie = " + findMovie);*/
+
+/*            //@@MappedSuperclass
+            Member member = new Member();
+            member.setUsername("user1");
+            member.setCreatedBy("kim");
+            member.setCreatedDate(LocalDateTime.now());
+            em.persist(member);
+
+            em.flush();
+            em.clear();*/
 
             tx.commit();
         }catch (Exception e){
