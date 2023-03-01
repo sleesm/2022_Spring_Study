@@ -4,6 +4,7 @@ package hellojpa;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -135,7 +136,7 @@ public class JpaMain {
             System.out.println("findMemberReference.getUsername() = " + findMemberReference.getUsername());
             System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(findMemberReference));*/
 
-
+/*            //cascade, orphanRemoval
             Child child1 = new Child();
             Child child2 = new Child();
 
@@ -149,7 +150,61 @@ public class JpaMain {
             em.clear();
 
             Parent findParent = em.find(Parent.class, parent.getId());
-            findParent.getChildren().remove(0);
+            findParent.getChildren().remove(0);*/
+
+
+/*            //immutable object
+            Address address = new Address("city", "street", "100");
+
+            Member member = new Member();
+            member.setUsername("hello");
+            member.setAddress(address);
+            member.setPeriod(new Period());
+            em.persist(member);
+
+            Address newAddress = new Address("newcity", address.getStreet(), address.getZipcode());
+
+            member.setAddress(newAddress);*/
+
+            Member member = new Member();
+            member.setUsername("hello");
+            member.setHomeAddress(new Address("homeCity", "street", "100"));
+
+            //값 타입 컬렉션
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("족발");
+            member.getFavoriteFoods().add("피자");
+
+            //값 타입 컬렉션 대안 -> 엔티티 사용
+            member.getAddressHistory().add(new AddressEntity("old1", "street", "100"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street", "100"));
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+/*           //값 타입 컬랙션 조회,수정
+            Member findMember = em.find(Member.class, member.getId());
+            List<Address> history = findMember.getAddressHistory();
+            for (Address address : history) {
+                System.out.println("address = " + address);
+            }
+
+            Set<String> favoriteFoods = findMember.getFavoriteFoods();
+            for (String favoriteFood : favoriteFoods) {
+                System.out.println("favoriteFood = " + favoriteFood);
+            }
+
+            Address a = findMember.getHomeAddress();
+            findMember.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipcode()));
+
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("짜장면");
+
+            //equals()를 기준으로 하기 때문에 제대로 들어가져 있어야 함!
+            findMember.getAddressHistory().remove(new Address("old1", "street", "100"));
+            findMember.getAddressHistory().add(new Address("newCity1", "street", "100"));*/
 
             tx.commit();
         }catch (Exception e){
