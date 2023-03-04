@@ -90,17 +90,33 @@ public class JpaMain {
                 System.out.println("member1 = " + member1);
             }*/
 
-            Team team = new Team();
-            team.setName("team1");
-            em.persist(team);
+            Team teamA = new Team();
+            teamA.setName("팀A");
+            em.persist(teamA);
 
-            Member member = new Member();
-            member.setUsername("관리자");//(null);//("member1");
-            member.setAge(10);
-            member.setType(MemberType.ADMIN);
-            member.changeTeam(team);
+            Team teamB = new Team();
+            teamB.setName("팀B");
+            em.persist(teamB);
 
-            em.persist(member);
+            Member member1 = new Member();
+            member1.setUsername("회원1");//(null);//("member1");
+            member1.setAge(10);
+            member1.setType(MemberType.ADMIN);
+            member1.changeTeam(teamA);
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("회원2");
+            member2.setAge(10);
+            member2.changeTeam(teamA);
+            em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("회원3");
+            member3.setAge(10);
+            member3.changeTeam(teamB);
+            em.persist(member3);
+
 
             em.flush();
             em.clear();
@@ -146,6 +162,42 @@ public class JpaMain {
                 System.out.println("o = " + o);
             }*/
 
+            /**
+             * 1번 쿼리 결과 :
+             * 회원1, 팀A(SQL - proxy)
+             * 회원2, 팀A(영속성 컨텍스트 - 1차 캐시)
+             * 회원3, 팀B(SQL - proxy)
+             * ...
+             * 회원 100명
+             * -> N + 1 번 문제 발생
+             *
+             * 2번 쿼리 결과 :
+             * join fetch 사용
+             * -> proxy 가 아닌 실제 entity 반환
+             *
+             * 3번 쿼리 결과 :
+             * 팀A 에 대하여 회원1, 회원2 존재 (결과가 중복된 결과)
+             *
+             * 4번 쿼리 결과 :
+             * distinct로 중복 제거
+             */
+            String query = "select m from Member m"; //1번 쿼리 후 - member.getTeam().getName() 조회 시, N + 1 문제 발생
+            query = "select m from Member m join fetch m.team"; //2번 쿼리 - fetch join (N : 1)
+            query = "select t from Team  t join fetch t.members"; //3번 쿼리 - collection fetch join (1 : N)
+            query = "select distinct t from Team  t join fetch t.members"; //4번 쿼리 - distinct 로 엔티티 중복 제거
+            query = "select t from Team t"; //5번 쿼리 - paging 하고 싶을 때 @BatchSize 혹은 persistence 에서 글로벌로 설정
+
+            List<Team> result = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
+                    .getResultList();
+
+            for (Team team : result) {
+                System.out.println("member = " + team.getName());
+                for(Member member : team.getMembers()){
+                    System.out.println("member.getUsername() = " + member.getUsername());
+                }
+            }
 
 
             tx.commit();
