@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -135,6 +136,16 @@ public class JpaMain {
             for (String s : result) {
                 System.out.println("s = " + s);
             }*/
+
+/*            //컬랙션 값 조인
+            String query = "select t.members.size from Team t";
+            query = "select m.username from Team t join t.members m";
+            List result = em.createQuery(query).getResultList();
+
+            for (Object o : result) {
+                System.out.println("o = " + o);
+            }*/
+
 
 
             tx.commit();
