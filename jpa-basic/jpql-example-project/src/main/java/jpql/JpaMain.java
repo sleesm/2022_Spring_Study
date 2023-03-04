@@ -181,7 +181,7 @@ public class JpaMain {
              * 4번 쿼리 결과 :
              * distinct로 중복 제거
              */
-            String query = "select m from Member m"; //1번 쿼리 후 - member.getTeam().getName() 조회 시, N + 1 문제 발생
+/*            String query = "select m from Member m"; //1번 쿼리 후 - member.getTeam().getName() 조회 시, N + 1 문제 발생
             query = "select m from Member m join fetch m.team"; //2번 쿼리 - fetch join (N : 1)
             query = "select t from Team  t join fetch t.members"; //3번 쿼리 - collection fetch join (1 : N)
             query = "select distinct t from Team  t join fetch t.members"; //4번 쿼리 - distinct 로 엔티티 중복 제거
@@ -197,7 +197,31 @@ public class JpaMain {
                 for(Member member : team.getMembers()){
                     System.out.println("member.getUsername() = " + member.getUsername());
                 }
-            }
+            }*/
+
+/*            //namedQuery 사용
+            List<Member> result = em.createNamedQuery("Member.findByUserName", Member.class)
+                    .setParameter("username", "회원1")
+                    .getResultList();
+
+            for (Member member : result) {
+                System.out.println("member = " + member);
+            }*/
+
+            //벌크 연산
+            int resultCount = em.createQuery("update Member m set m.age = 20").executeUpdate();
+
+            System.out.println("resultCount = " + resultCount);
+
+            //영속성 컨텍스트 업데이트 안되어 있음.
+            System.out.println("member1.getAge() = " + member1.getAge());
+            System.out.println("member2.getAge() = " + member2.getAge());
+            System.out.println("member3.getAge() = " + member3.getAge());
+
+            //영속성 컨텍스트 초기화 후 다시 조회 필요.
+            em.clear();
+            Member findMember = em.find(Member.class, member1.getId());
+            System.out.println("findMember.getAge() = " + findMember.getAge());
 
 
             tx.commit();
